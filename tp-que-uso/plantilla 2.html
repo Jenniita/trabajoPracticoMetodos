@@ -306,15 +306,15 @@
 
         //Aqui abrimos el menú cuando clickamos en él y se cierra también al volver a clickar
         menuMas.addEventListener("click", (evento) => {
-            submenuMas.classList.toggle("abierto")
+            submenuMas.classList.toggle("abierto") //le añadimos al submenu la clase abierto
 
-            evento.stopPropagation() //le ponemos un stopPropagation() 
+            evento.stopPropagation() //le ponemos un stopPropagation() al hijo para que no propague el evento en todo el body. Porque es como de dentro a fuera.
 
         })
 
         //Ahora cuando clickemos en el body, le quitará al submenú la clase
         body.addEventListener("click", ()=>{
-            submenuMas.classList.remove("abierto")
+            submenuMas.classList.remove("abierto") //le quitamos al submenu la clase abierto
         })
 
         //Ahora cuando clicke en cualquier otro sitio, se tiene que cerrar el submenu
