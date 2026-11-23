@@ -313,14 +313,90 @@
         })
 
         //Ahora cuando clickemos en el body, le quitará al submenú la clase
-        body.addEventListener("click", ()=>{
+        body.addEventListener("click", () => {
             submenuMas.classList.remove("abierto") //le quitamos al submenu la clase abierto
         })
 
         //Ahora cuando clicke en cualquier otro sitio, se tiene que cerrar el submenu
 
         console.log("-------------2.3-------------")
+        //Decisión: <click, mouseleave> click para abrir el menú buscador, y mouse leave para que detecte cuando el mouse sale del buscador y se cierre
 
+        //para que se expanda, hay que añadirle a ".buscador" la clase "abierto"
+
+        const buscador = document.querySelector(".buscador")
+        const inputBuscador = document.querySelector(".entrada-busqueda")
+
+
+        buscador.addEventListener("click", () => {
+            buscador.classList.add("abierto")
+
+        })
+
+        buscador.addEventListener("mouseleave", () => {
+
+            if (inputBuscador.value.trim() === "") { //Si el input de buscador está vacio
+                buscador.classList.remove("abierto") //Le quitamos la clase al salir
+            }
+
+        })
+
+        console.log("-------------2.4-------------")
+
+        //Decisión: <keydown + event.key> keydown porque se cerrará al pulsar la tecla escape, que especificamos con event.key
+
+        //como ya tengo la constante de buscador del otro ejercicio, cogeré esa
+
+        buscador.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                buscador.classList.remove("abierto")
+                inputBuscador.value = "" //Quitamos el texto que haya en el input
+            }
+        })
+
+        console.log("-------------2.5-------------")
+        //Decisión: <función para pintar, y click> hago una funcion para pintar todos los campeones del array con los datos que me piden y luego en el eventListener vamos a hacerlo con un click
+
+        //Hacer un renderizado para pintar los li en lista-campeones
+
+        const listaCampeones = document.querySelector(".lista-campeones") //Seleccionamos el ul donde pintaremos los li
+
+        function pintar(arrayRecibido) {
+            //Lo vaciamos por si tuviera algo (no tiene nada)
+            listaCampeones.innerHTML = ""
+
+            arrayRecibido.forEach(({ imagen, nombre }) => { //los datos que vamos a pintar en los li, recibidos del array de campeones
+                const campeon = document.createElement("li") //creamos los li
+                listaCampeones.appendChild(campeon) //y los metemos en el ul
+
+                campeon.innerHTML = `<span class="emoji">${imagen}</span> <span class="nombre">${nombre}</span>`
+            });
+        }
+
+        pintar(campeones) //pintamos todos los campeones
+
+
+        //Ahora vamos a hacer el listener
+
+        //Al hacer clic en un campeón, mostrá en .info-campeon su rol, dificultad y precio, y marcá ese li con la clase seleccionado.
+        listaCampeones.addEventListener("click", (event) => {
+            const infoCampeon = document.querySelector(".info-campeon")
+            const filaCampeon = event.target.closest("li") //para que coja el li mas cercano a lo que hemos clickado, porque sino marcaria el "span"
+
+            // 2. ¿Cómo se llama?
+            const nombre = filaCampeon.querySelector(".nombre").textContent
+
+            // 3. Sus datos
+            const campeon = campeones.find(c => c.nombre === nombre)
+
+            // 4. Escribirlos abajo
+            infoCampeon.textContent = `${campeon.rol} · Dificultad ${campeon.dificultad} · ${campeon.precio} EA`
+
+            // 5. Marcar la fila
+            const anterior = listaCampeones.querySelector(".seleccionado")
+            if (anterior !== null) anterior.classList.remove("seleccionado")
+            filaCampeon.classList.add("seleccionado")
+        })
 
 
 
